@@ -8,6 +8,5 @@ public class MdsTzAkcijeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MdsTzAkcijeApplication.class, args);
-	}
-
+}
 }
