@@ -25,7 +25,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.getAllPrices());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri dohvatanju svih cena");
+            return ResponseEntity.badRequest().body("Greska pri dohvatanju svih cena " + e.getMessage());
         }
     }
 
@@ -34,7 +34,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.findById(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri dohvatanju cene sa id: " + id);
+            return ResponseEntity.badRequest().body("Greska pri dohvatanju cene sa id: " + id + " " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.save(price));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri dodavanju cene");
+            return ResponseEntity.badRequest().body("Greska pri dodavanju cene " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.save(price));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri izmeni cene");
+            return ResponseEntity.badRequest().body("Greska pri izmeni cene " + e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class PriceController {
             priceService.deleteById(id);
             return ResponseEntity.ok("Uspesno obrisana cena sa id: " + id);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri brisanju cene");
+            return ResponseEntity.badRequest().body("Greska pri brisanju cene "+ e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.predlogZaKupovinuJedna(buyDTO));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri dohvatanju predloga za kupovinu");
+            return ResponseEntity.badRequest().body("Greska pri dohvatanju predloga za kupovinu " + e.getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class PriceController {
         try {
             return ResponseEntity.ok(priceService.predlogZaKupovinuVise(buyDTO));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Greska pri dohvatanju predloga za kupovinu" + e.getMessage());
+            return ResponseEntity.badRequest().body("Greska pri dohvatanju predloga za kupovinu " + e.getMessage());
         }
     }
 

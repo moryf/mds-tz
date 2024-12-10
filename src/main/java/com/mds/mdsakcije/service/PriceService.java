@@ -7,6 +7,7 @@ import com.mds.mdsakcije.dto.BuyMultipleResponseDTO;
 import com.mds.mdsakcije.dto.BuyResponseDTO;
 import com.mds.mdsakcije.dto.PriceDTO;
 import com.mds.mdsakcije.repo.PriceRepo;
+import com.mds.mdsakcije.repo.StockRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class PriceService {
 
     private final PriceRepo repo;
+    private final StockRepo stockRepo;
 
     @Autowired
-    public PriceService(PriceRepo priceRepository) {
+    public PriceService(PriceRepo priceRepository, StockRepo stockRepo) {
         this.repo = priceRepository;
+        this.stockRepo = stockRepo;
     }
 
     public List<Price> getAllPrices() {
@@ -43,6 +46,9 @@ public class PriceService {
     }
 
     public HashMap<String,BuyResponseDTO> predlogZaKupovinuJedna(BuyDTO buyDTO) {
+        if(!stockRepo.existsById(buyDTO.getOznaka())){
+            throw new RuntimeException("Ne postoji akcija sa oznakom: "+buyDTO.getOznaka());
+        }
         HashMap<String,BuyResponseDTO> responseDTOHashMap = new HashMap<>();
         responseDTOHashMap.put("Trazeni period "
                 +buyDTO.getOdDatuma().toString()
@@ -91,13 +97,16 @@ public class PriceService {
     }
 
     public BuyMultipleResponseDTO predlogZaKupovinuVise(BuyDTO buyDTO) {
+        if(!stockRepo.existsById(buyDTO.getOznaka())){
+            throw new RuntimeException("Ne postoji akcija sa oznakom: "+buyDTO.getOznaka());
+        }
         List<Price> prices = repo.findByOznakaAndDatumBetweenOrderByDatumAsc(buyDTO.getOznaka(), buyDTO.getOdDatuma(), buyDTO.getDoDatuma());
         BuyMultipleResponseDTO responseDTO = new BuyMultipleResponseDTO();
         if (prices.isEmpty()) {
-            return null;
+            throw new RuntimeException("Ne postoje podaci za trazeni period");
         }
         for (int i = 0; i < prices.size(); i++) {
-            if(i==prices.size()-1){
+            if (i == prices.size() - 1) {
                 break;
             }
             if(prices.get(i).getClose()>prices.get(i+1).getClose()){

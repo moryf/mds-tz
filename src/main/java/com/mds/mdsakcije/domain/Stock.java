@@ -29,6 +29,10 @@ public class Stock {
         this.lokacija = lokacija;
     }
 
+    public Stock(String oznaka) {
+        this.oznaka = oznaka;
+    }
+
     public Stock() {
     }
 
